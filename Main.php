@@ -1,6 +1,7 @@
 <?php
 
 	include "interface.page.php";
+	include "class.templateEngine.php";
 	include "class.homePage.php";
 	include "class.weatherPage.php";
 	include "class.listsPage.php";
