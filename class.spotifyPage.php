@@ -3,12 +3,12 @@
 	public class spotifyPage extends Page{
 
 		public function __construct(){
-	        $this->name = "Home";
-	        $this->pageId = "Home";
+	        $this->name = "Spotify";
+	        $this->pageId = "Music";
 	        $this->svgIcon = "/img/svg/Home.svg";
 	    }
 
-		public function displayContent(){
+		public function process(array $getParams, array $postParams){
 			return "";
 		}
 	}

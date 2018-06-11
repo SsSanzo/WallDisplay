@@ -3,12 +3,12 @@
 	public class newsPage extends Page{
 
 		public function __construct(){
-	        $this->name = "Home";
-	        $this->pageId = "Home";
+	        $this->name = "News";
+	        $this->pageId = "News";
 	        $this->svgIcon = "/img/svg/Home.svg";
 	    }
 
-		public function displayContent(){
+		public function process(array $getParams, array $postParams){
 			return "";
 		}
 	}

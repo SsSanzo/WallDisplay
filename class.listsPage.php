@@ -3,12 +3,12 @@
 	public class listsPage extends Page{
 
 		public function __construct(){
-	        $this->name = "Home";
-	        $this->pageId = "Home";
+	        $this->name = "Lists";
+	        $this->pageId = "Lists";
 	        $this->svgIcon = "/img/svg/Home.svg";
 	    }
 
-		public function displayContent(){
+		public function process(array $getParams, array $postParams){
 			return "";
 		}
 	}

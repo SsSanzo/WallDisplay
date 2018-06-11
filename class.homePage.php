@@ -10,7 +10,7 @@
 	        $this->svgIcon = "/img/svg/Home.svg";
 	    }
 
-		public function displayContent(){
+		public function process(array $getParams, array $postParams){
 			return "";
 		}
 
