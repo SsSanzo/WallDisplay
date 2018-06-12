@@ -23,10 +23,11 @@
 	);
 
 	function displayNavigationMenu(array $pages): string{
-		
+
+		$engine = new templateEngine();
 		$list = array();
 		foreach ($pages as $page) {
-			array_push($list, "<LI>" . $page.displayIcon() . "</LI>");
+			$list[] = "<LI>" . $engine->render("navigation.icon", array("pageName" => $page->name, "pageId" => $page->pageId, "iconURL" => $page->svgIcon, )) . "</LI>";
 		}
 		return "<UL>" . implode("", $list) . "</UL>";
 	}
@@ -34,8 +35,8 @@
 	function processPage(array $pages, array $getParams, array $postParams): string{
 		$tagetPage = $getParams["pt"] ?? $pages[1]->pageId;
 		foreach ($pages as $page) {
-			if(strcasecmp($page->pageId, $tagetPage)){
-				$page->process($getParams, $postParams);
+			if(strcasecmp($page->pageId, $tagetPage)==0){
+				return $page->process($getParams, $postParams);
 			}
 		}
 	}

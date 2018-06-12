@@ -1,6 +1,6 @@
 <?php
 
-	public class calendarPage extends Page{
+	class calendarPage extends Page{
 
 		public function __construct(){
 	        $this->name = "Calendar";
@@ -8,7 +8,7 @@
 	        $this->svgIcon = "img/svg/calendar.svg";
 	    }
 
-		public function process(array $getParams, array $postParams){
+		public function process(array $getParams, array $postParams): string{
 			return "";
 		}
 	}

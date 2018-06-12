@@ -1,9 +1,10 @@
 <?php
 
-	public class newsPage extends Page{
+	class newsPage extends Page{
 
-		$rssFeeds = array(
-			"https://www.npr.org/rss/rss.php?id=1001"
+		private $rssFeeds = array(
+			"https://www.npr.org/rss/rss.php?id=1001",
+			"http://feeds.bbci.co.uk/news/world/rss.xml"
 		);
 
 		public function __construct(){
@@ -12,18 +13,8 @@
 	        $this->svgIcon = "img/svg/news.svg";
 	    }
 
-		public function process(array $getParams, array $postParams){
-			$buffer = array();
-
-			foreach ($this->rssFeeds as $feed) {
-				$buffer[] = displayFeed($feed);
-			}
-
-			return implode("", $buffer);
-		}
-
-		public function displayFeed($feedURL = ""){
-			If(strcmp("", $feedURL)) return "";
+		public function displayFeed($feedURL = ""): string{
+			If(strcmp("", $feedURL)==0) return "newsPage:displayFeed() no feed to display";
 
 			$engine = new templateEngine();
 			$buffer = array();
@@ -41,8 +32,17 @@
 				$buffer[] = $engine->render("rss.storyItem", array("title" => $title, "description" => $description));
 			}
 
-			$engine->render("rss.container", array("title" => $channel_title, "channel" => $channel, "items" => implode("", $buffer)));
+			return $engine->render("rss.container", array("title" => $channel_title, "items" => implode("", $buffer)));
+		}
 
+		public function process(array $getParams, array $postParams): string{
+			$buffer = array();
+
+			foreach ($this->rssFeeds as $feed) {
+				array_push($buffer, $this->displayFeed($feed));
+			}
+
+			return implode("", $buffer);
 		}
 	}
 	

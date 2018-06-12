@@ -1,6 +1,6 @@
 <?php
 
-	public class settingsPage extends Page{
+	class settingsPage extends Page{
 
 		public function __construct(){
 	        $this->name = "Settings";
@@ -8,7 +8,7 @@
 	        $this->svgIcon = "img/svg/settings.svg";
 	    }
 
-		public function process(array $getParams, array $postParams){
+		public function process(array $getParams, array $postParams): string{
 			return "";
 		}
 	}

@@ -1,16 +1,16 @@
 <?php
-
-	public class templateEngine{
-		public $templates;
+	class templateEngine{
+		public $templates = null;
 
 		public function __construct(){
 	        $this->templates = array(
 	        	"rss.container" => "templates/rss.container.html",
-	        	"rss.storyItem" => "templates/rss.storyItem.html"
+	        	"rss.storyItem" => "templates/rss.storyItem.html",
+	        	"navigation.icon" => "templates/navigation.icon.html"
 	        );
 	    }
 
-		public render(string $templateId = null, array $values = null): string{
+		public function render(string $templateId = null, array $values = null): string{
 			if(!isset($templateId) OR !isset($values)) return "templateEngine:render() unidentified template";
 			if(file_exists($this->templates["$templateId"])){
 				$data = file_get_contents($this->templates["$templateId"]);
