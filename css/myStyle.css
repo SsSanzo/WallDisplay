@@ -1,0 +1,32 @@
+body{
+	margin: 0;
+}
+div.leftMenu{
+	width: 10%;
+	border-right: #152B55 1px solid;
+	box-shadow: 2px 0px 1px #efefef;
+	background-color: #eee;
+	float: left;
+	position: absolute;
+	height: 100%
+}
+
+.leftMenu ul{
+	list-style-type: none;
+	padding: 10px;
+}
+
+.leftMenu li{
+	padding: 15px 0;
+}
+
+.headerIcon{
+	width: 100%;
+}
+
+div.container{
+	width: 88%;
+    float: right;
+    margin-left: 12%;
+    position: inherit;
+}

@@ -5,6 +5,7 @@
 	include "class.homePage.php";
 	include "class.weatherPage.php";
 	include "class.listsPage.php";
+	include "class.medicinePage.php";
 	include "class.newsPage.php";
 	include "class.spotifyPage.php";
 	include "class.calendarPage.php";
@@ -16,6 +17,7 @@
 		new listsPage(),
 		new newsPage(),
 		new spotifyPage(),
+		new medicinePage(),
 		new calendarPage(),
 		new settingsPage()
 	);
@@ -26,7 +28,7 @@
 		foreach ($pages as $page) {
 			array_push($list, "<LI>" . $page.displayIcon() . "</LI>");
 		}
-		return "<UL>" . implode("", $list) . "</UL>"
+		return "<UL>" . implode("", $list) . "</UL>";
 	}
 
 	function processPage(array $pages, array $getParams, array $postParams): string{

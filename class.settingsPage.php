@@ -5,7 +5,7 @@
 		public function __construct(){
 	        $this->name = "Settings";
 	        $this->pageId = "Settings";
-	        $this->svgIcon = "/img/svg/Home.svg";
+	        $this->svgIcon = "img/svg/settings.svg";
 	    }
 
 		public function process(array $getParams, array $postParams){

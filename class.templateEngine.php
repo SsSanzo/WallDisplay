@@ -5,7 +5,7 @@
 
 		public function __construct(){
 	        $this->templates = array(
-	        	"rss.container" => "templates/rss.container.html"
+	        	"rss.container" => "templates/rss.container.html",
 	        	"rss.storyItem" => "templates/rss.storyItem.html"
 	        );
 	    }
