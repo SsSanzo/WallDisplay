@@ -12,12 +12,13 @@
 	</head>
 	<body>
 		<div class="leftMenu">
-			<ul>
-				<?php echo displayNavigationMenu($pages); ?>
-			</ul>
+			<?php echo displayNavigationMenu($pages); ?>
 		</div>
 		<div class="container">
-			<?php echo processPage($pages, $_GET, $_POST); ?>
+			<?php 
+			echo displayName($pages, $_GET, $_POST);
+			echo processPage($pages, $_GET, $_POST);
+			?>
 		</div>
 	</body>
 </html>

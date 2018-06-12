@@ -7,7 +7,10 @@
 	        	"rss.container" => "templates/rss.container.html",
 	        	"rss.storyItem" => "templates/rss.storyItem.html",
 	        	"rss.storyContent" => "templates/rss.storycontent.html",
-	        	"navigation.icon" => "templates/navigation.icon.html"
+	        	"rss.storyContent.textonly" => "templates/rss.storycontent.textonly.html",
+	        	"navigation.icon" => "templates/navigation.icon.html",
+	        	"navigation.leftmenu.container" => "templates/navigation.leftmenu.container.html",
+	        	"navigation.header" => "templates/navigation.header.html"
 	        );
 	    }
 

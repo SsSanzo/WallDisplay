@@ -1,6 +1,7 @@
 <?php
 
 	include "interface.page.php";
+	include "class.db.php";
 	include "class.templateEngine.php";
 	include "class.homePage.php";
 	include "class.weatherPage.php";
@@ -27,16 +28,27 @@
 		$engine = new templateEngine();
 		$list = array();
 		foreach ($pages as $page) {
-			$list[] = "<LI>" . $engine->render("navigation.icon", array("pageName" => $page->name, "pageId" => $page->pageId, "iconURL" => $page->svgIcon, )) . "</LI>";
+			$list[] = $engine->render("navigation.icon", array("pageName" => $page->name, "pageId" => $page->pageId, "iconURL" => $page->svgIcon, ));
 		}
-		return "<UL>" . implode("", $list) . "</UL>";
+		return $engine->render("navigation.leftmenu.container",array("iconList" => implode("", $list)));
 	}
 
 	function processPage(array $pages, array $getParams, array $postParams): string{
-		$tagetPage = $getParams["pt"] ?? $pages[1]->pageId;
+		$tagetPage = $getParams["pt"] ?? $pages[0]->pageId;
 		foreach ($pages as $page) {
 			if(strcasecmp($page->pageId, $tagetPage)==0){
 				return $page->process($getParams, $postParams);
+			}
+		}
+	}
+
+	function displayName(array $pages, array $getParams, array $postParams): string{
+		
+		$engine = new templateEngine();
+		$tagetPage = $getParams["pt"] ?? $pages[0]->pageId;
+		foreach ($pages as $page) {
+			if(strcasecmp($page->pageId, $tagetPage)==0){
+				return $engine->render("navigation.header", array("name" => $page->name));
 			}
 		}
 	}
