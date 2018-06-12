@@ -6,6 +6,7 @@
 	        $this->templates = array(
 	        	"rss.container" => "templates/rss.container.html",
 	        	"rss.storyItem" => "templates/rss.storyItem.html",
+	        	"rss.storyContent" => "templates/rss.storycontent.html",
 	        	"navigation.icon" => "templates/navigation.icon.html"
 	        );
 	    }
