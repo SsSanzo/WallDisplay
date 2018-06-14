@@ -29,6 +29,7 @@
 			$this->id = $id;
 			$this->archived = $archived;
 			/* generate list of items */
+			$res = $this->db->select("list_items", "name, id, checked");
 		}
 	}
 
