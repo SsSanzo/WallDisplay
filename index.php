@@ -1,7 +1,9 @@
 <?php
-	include 'main.php';
+
+	include 'Main.php';
 
 	include 'NoaaWeather.php';
+
 ?>
 <!doctype html>
 <html lang="en-US">

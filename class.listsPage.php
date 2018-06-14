@@ -1,50 +1,6 @@
 <?php
 
-	class listItem{
-		public $list=null;
-		public $name=null;
-		public $id=null;
-		public $checked=null;
-
-		private $db=null;
-		private $table=null;
-
-		public function __construct(
-								db $db=null,
-								list $list=null,
-								string $name=null,
-								int $id=null,
-								boolean $checked=null){
-			if(isset($db)){
-				$this->db = $db;
-			}else{
-				$this->db = new db();
-			}
-			$this->table = "list_items";
-			$this->list = $list;
-			$this->name = $name;
-			$this->id = $id;
-			$this->checked = $checked;
-		}
-
-		public function push(){
-			$values = array();
-			if(isset($this->name)){
-				array_push($values, "Name" => "'" . $this->name . "'");
-			}
-			if(isset($this->checked)){
-				array_push($values, "Checked" => ($checked ? 1, 0));
-			}
-			$db->update(
-				$this->table,
-				$values,
-				$this->id
-			);
-
-		}
-	}
-
-	class list{
+	class todo{
 
 		public $name=null;
 		public $id=null;
@@ -75,6 +31,52 @@
 			/* generate list of items */
 		}
 	}
+
+	class listItem{
+		public $list=null;
+		public $name=null;
+		public $id=null;
+		public $checked=null;
+
+		private $db=null;
+		private $table=null;
+
+		public function __construct(
+								db $db=null,
+								todo $list=null,
+								string $name=null,
+								int $id=null,
+								boolean $checked=null){
+			if(isset($db)){
+				$this->db = $db;
+			}else{
+				$this->db = new db();
+			}
+			$this->table = "list_items";
+			$this->list = $list;
+			$this->name = $name;
+			$this->id = $id;
+			$this->checked = $checked;
+		}
+
+		public function push(){
+			$values = array();
+			if(isset($this->name)){
+				$values["Name"] = "'" . $this->name . "'";
+			}
+			if(isset($this->checked)){
+				$values["Checked"] = ($checked ? 1: 0);
+			}
+			$db->update(
+				$this->table,
+				$values,
+				$this->id
+			);
+
+		}
+	}
+
+	
 
 	class listsPage extends Page{
 
