@@ -16,14 +16,14 @@
 			$this->password = "45FZG3wwX";
 			$this->dbname = "walldisplay";
 
-			$connection = new mysqli($this->url, $this->username, $this->password, $this->dbname);
-			if($conn->connect_error){
+			$this->connection = new mysqli($this->url, $this->username, $this->password, $this->dbname);
+			if($this->connection->connect_error){
 				echo "db:__construct() Could not connect to database";
 			}
 		}
 
 		public function __destruct (){
-			$connection->close();
+			$this->connection->close();
 		}
 
 		public function select(string $table, array $values, string $condition){
@@ -36,10 +36,10 @@
 				return false;
 			}
 			$query = "SELECT " . implode(",", $values) . " FROM " . $table;
-			if(isset($condition) and count($condition)>0){
+			if(isset($condition) and strlen($condition)>0){
 				$query .= " WHERE ". $condition;
 			}
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() select error:". $query;
 				return false;
@@ -69,7 +69,7 @@
 			$query .= " (" . implode(",", $cols) . ")";
 			$query .= " VALUES (" . implode(",", $vals) . ")";
 
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() insert error:". $query;
 				return false;
@@ -99,7 +99,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE " . $condition;
 
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() updateAll error:". $query;
 				return $result;
@@ -129,7 +129,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE id=" . $id;
 
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() update error:". $query;
 				return $result;
@@ -143,12 +143,12 @@
 				$this->errormsg = "db:select() argument $table is null or empty";
 				return false;
 			}
-			if(!isset($condition) or count($condition)==0){
+			if(!isset($condition) or strlen($condition)==0){
 				$this->errormsg = "db:select() argument $condition is null or empty";
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE ". $condition;
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() deleteAll error:". $query;
 				return $result;
@@ -167,7 +167,7 @@
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE id=". $id;
-			$result = $connection->query($query);
+			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() delete error:". $query;
 				return $result;

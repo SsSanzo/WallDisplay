@@ -29,7 +29,11 @@
 			$this->id = $id;
 			$this->archived = $archived;
 			/* generate list of items */
-			$res = $this->db->select("list_items", "name, id, checked");
+			$res = $this->db->select("list_items", array("name", "id", "checked"), "list=" . $this->id);
+			$this->items = array();
+			foreach ($res as $i => $row) {
+				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (boolean) $row["checked"]);
+			}
 		}
 	}
 
@@ -81,6 +85,8 @@
 
 	class listsPage extends Page{
 
+		public $lists = null;
+
 		public function __construct(){
 	        $this->name = "Lists";
 	        $this->pageId = "Lists";
@@ -88,6 +94,12 @@
 	    }
 
 		public function process(array $getParams, array $postParams): string{
+			$db = new db();
+			$res = $db->select("list", array("name", "id", "color"), "Archived=false");
+			$this->lists = array();
+			foreach ($res as $i => $row) {
+				$this->lists[] = new todo($db, $row["color"], $row["name"], (int) $row["id"]);
+			}
 			return "";
 		}
 	}
