@@ -164,8 +164,19 @@
 		public function process(array $getParams, array $postParams): string{
 			if(isset($getParams["aQuery"])){
 				if(strcmp("updateItem", $getParams["aQuery"]) == 0){
-					var_dump($getParams);
 					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null);
+				}
+				if(strcmp("addItem", $getParams["aQuery"]) == 0){
+					// adding an item
+				}
+				if(strcmp("addList", $getParams["aQuery"]) == 0){
+					// adding a list
+				}
+				if(strcmp("editList", $getParams["aQuery"]) == 0){
+					// editing a list
+				}
+				if(strcmp("archiveList", $getParams["aQuery"]) == 0){
+					// archiving a list
 				}
 			}
 			if(isset($getParams["lid"])) return $this->displayList((int) $getParams["lid"]);

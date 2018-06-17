@@ -28,7 +28,7 @@ div.leftMenu{
 }
 
 .containerHeader{
-	height: 50px;
+	height: 80px;
 	width: 100%;
 	font-size: 56px;
 	padding-top:10px;
@@ -71,7 +71,7 @@ div.rssContainer{
 
 .rssContainer div:first-child{
 	background-color: #3883d8;
-	font-size: 35px;
+	font-size: 46px;
 	color:white;
 	padding: 5px;
 }
@@ -92,7 +92,7 @@ div.rssContainer{
 }
 
 .rssContainer .rssStory p:first-child{
-	font-size: 18px;
+	font-size: 38px;
 	padding: 7px;
 }
 
@@ -122,6 +122,7 @@ div.rssContainer{
 	bottom:0px;
 	color: white;
 	padding: 30px;
+	font-size: 36px;
 	height: fit-content;
 }
 
@@ -150,7 +151,7 @@ a.rssPopupClose{
 	padding: 3px;
 	display: block;
 	margin-bottom: 5px;
-	width: 40px;
+	width: 150px;
     text-align: center;
 }
 
@@ -182,6 +183,7 @@ a.rssPopupClose{
 .listHeader, .listItem, .newItem {
     padding: 10px;
     font-size: 46px;
+    color: #333;
 }
 
 .listItem, .newItem {
