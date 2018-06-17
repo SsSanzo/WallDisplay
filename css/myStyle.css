@@ -30,7 +30,7 @@ div.leftMenu{
 .containerHeader{
 	height: 50px;
 	width: 100%;
-	font-size: 48px;
+	font-size: 56px;
 	padding-top:10px;
 	color: white;
 	background: linear-gradient(to right, rgb(56,131,216) 1%,rgb(40,151,237) 100%); 
@@ -156,7 +156,7 @@ a.rssPopupClose{
 
 .listAdd {
     margin: 5px;
-    font-size: 36px;
+    font-size: 46px;
     background-color: hsl(122, 39%, 49%);
     text-align: center;
     width: 10%;
@@ -180,7 +180,7 @@ a.rssPopupClose{
 
 .listHeader, .listItem, .newItem {
     padding: 10px;
-    font-size: 36px;
+    font-size: 46px;
 }
 
 .listItem, .newItem {
