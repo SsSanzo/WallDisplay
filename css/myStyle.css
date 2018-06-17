@@ -122,8 +122,9 @@ div.rssContainer{
 	bottom:0px;
 	color: white;
 	padding: 30px;
-	font-size: 36px;
+	font-size: 28px;
 	height: fit-content;
+	overflow: scroll;
 }
 
 .rssPopup img {
@@ -205,4 +206,22 @@ a.rssPopupClose{
     color: grey;
     text-decoration: line-through;
     font-style: italic;
+}
+
+.listItem input{
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.listItem{
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
