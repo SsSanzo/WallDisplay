@@ -156,7 +156,7 @@ a.rssPopupClose{
 
 .listAdd {
     margin: 5px;
-    font-size: 26px;
+    font-size: 36px;
     background-color: hsl(122, 39%, 49%);
     text-align: center;
     width: 10%;
@@ -180,7 +180,7 @@ a.rssPopupClose{
 
 .listHeader, .listItem, .newItem {
     padding: 10px;
-    font-size: 22px;
+    font-size: 36px;
 }
 
 .listItem, .newItem {
