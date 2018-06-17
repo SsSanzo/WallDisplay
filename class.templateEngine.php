@@ -12,7 +12,9 @@
 	        	"navigation.leftmenu.container" => "templates/navigation.leftmenu.container.html",
 	        	"navigation.header" => "templates/navigation.header.html",
 	        	"list.all" => "templates/list.all.html",
-	        	"list.all.row" => "templates/list.all.row.html"
+	        	"list.all.row" => "templates/list.all.row.html",
+	        	"list.one" => "templates/list.one.html",
+	        	"list.one.item" => "templates/list.one.item.html"
 	        );
 	    }
 

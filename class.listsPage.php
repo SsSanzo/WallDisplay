@@ -79,9 +79,10 @@
 				$values["Name"] = "'" . $this->name . "'";
 			}
 			if(isset($this->checked)){
-				$values["Checked"] = ($checked ? 1: 0);
+				$values["Checked"] = ($this->checked ? 1: 0);
 			}
-			$db->update(
+			var_dump($values);
+			$this->db->update(
 				$this->table,
 				$values,
 				$this->id
@@ -114,9 +115,25 @@
 					$iTotal++;
 					if($item->checked) $iChecked++;
 				}
-				$rows[] = $engine->render("list.all.row", Array("name" => $todoList->name, "Bcolor" => $todoList->Bcolor, "Tcolor" => "White", "itemsChecked" => $iChecked, "itemsTotal" => $iTotal));
+				$rows[] = $engine->render("list.all.row", Array("id" => $todoList->id, "name" => $todoList->name, "Bcolor" => $todoList->Bcolor, "Tcolor" => $todoList->Tcolor, "itemsChecked" => $iChecked, "itemsTotal" => $iTotal));
 			}
 			return $engine->render("list.all", array("items" => implode("", $rows)));
+		}
+
+		public function renderSingleLists(): string{
+			if(count($this->lists)<1) return "List not found";
+			$rowsUnchecked = array();
+			$rowsChecked = array();
+			$list = $this->lists[0];
+			$engine = new templateEngine();
+			foreach ($list->items as $item) {
+				if($item->checked){
+					$rowsChecked[] = $engine->render("list.one.item", Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : ""));
+				}else{
+					$rowsUnchecked[] = $engine->render("list.one.item", Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : ""));
+				}				
+			}
+			return $engine->render("list.one", array("id" => $list->id, "Bcolor" => $list->Bcolor, "Tcolor" => $list->Tcolor, "name" => $list->name, "items" => implode("", $rowsUnchecked), "checkedItems" => implode("", $rowsChecked)));
 		}
 
 		public function displayListOfLists(bool $archived): string{
@@ -130,15 +147,28 @@
 
 		public function displayList(int $id = null): string{
 			if(!isset($id)) return $this->displayListOfLists(false);
-			$res = $this->db->select("list", array("name", "Bcolor", "Tcolor"), "id=" . $id);
+			$res = $this->db->select("list", array("name", "Bcolor", "Tcolor", "id"), "id=" . $id);
 			$this->lists = array();
 			foreach ($res as $i => $row) {
 				$this->lists[] = new todo($this->db, $row["Tcolor"], $row["Bcolor"], $row["name"], (int) $row["id"]);
 			}
-			return "";
+			return $this->renderSingleLists();
+		}
+
+		public function updateItem(int $id, bool $checked=null, string $name = null){
+			if(!isset($id)) return;
+			$item = new listItem(null, null, $name, $id, $checked);
+			$item->push();
 		}
 
 		public function process(array $getParams, array $postParams): string{
+			if(isset($getParams["aQuery"])){
+				if(strcmp("updateItem", $getParams["aQuery"]) == 0){
+					var_dump($getParams);
+					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null);
+				}
+			}
+			if(isset($getParams["lid"])) return $this->displayList((int) $getParams["lid"]);
 			return $this->displayListOfLists(false);
 		}
 	}

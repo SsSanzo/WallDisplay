@@ -40,6 +40,7 @@
 				return $page->process($getParams, $postParams);
 			}
 		}
+		return "";
 	}
 
 	function displayName(array $pages, array $getParams, array $postParams): string{
@@ -51,6 +52,7 @@
 				return $engine->render("navigation.header", array("name" => $page->name));
 			}
 		}
+		return $engine->render("navigation.header", array("name" => "Page does not exist"));
 	}
 
 ?>

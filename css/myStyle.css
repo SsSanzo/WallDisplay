@@ -169,4 +169,37 @@ a.rssPopupClose{
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
+    border: #eee 1px solid;
+}
+
+.todoContainer {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 20px;
+}
+
+.listHeader, .listItem, .newItem {
+    padding: 10px;
+    font-size: 22px;
+}
+
+.listItem, .newItem {
+    border-bottom: #eee 1px solid;
+    border-left: #eee 1px solid;
+    border-right: 1px solid #eee;
+}
+
+.listHeader {
+    border-radius: 5px 5px 0 0;
+}
+
+.newItem {
+    background-color: hsl(122, 39%, 49%);
+    color: white;
+}
+
+.listItem.checked {
+    color: grey;
+    text-decoration: line-through;
+    font-style: italic;
 }
