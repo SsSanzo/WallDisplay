@@ -10,7 +10,9 @@
 	        	"rss.storyContent.textonly" => "templates/rss.storycontent.textonly.html",
 	        	"navigation.icon" => "templates/navigation.icon.html",
 	        	"navigation.leftmenu.container" => "templates/navigation.leftmenu.container.html",
-	        	"navigation.header" => "templates/navigation.header.html"
+	        	"navigation.header" => "templates/navigation.header.html",
+	        	"list.all" => "templates/list.all.html",
+	        	"list.all.row" => "templates/list.all.row.html"
 	        );
 	    }
 

@@ -4,8 +4,12 @@
 
 		public $name=null;
 		public $id=null;
-		public $color=null;
+		public $Tcolor=null;
+		public $Bcolor=null;
 		public $archived=null;
+		public $dueDate=null;
+		public $reminder=null;
+		public $severity=null;
 
 		public $items=null;
 
@@ -14,17 +18,19 @@
 
 		public function __construct(
 								db $db=null,
-								string $color=null,
+								string $Tcolor=null,
+								string $Bcolor=null,
 								string $name=null,
 								int $id=null,
-								boolean $archived=null){
+								bool $archived=null){
 			if(isset($db)){
 				$this->db = $db;
 			}else{
 				$this->db = new db();
 			}
 			$this->table = "lists";
-			$this->color = $color;
+			$this->Tcolor = $Tcolor;
+			$this->Bcolor = $Bcolor;
 			$this->name = $name;
 			$this->id = $id;
 			$this->archived = $archived;
@@ -32,7 +38,7 @@
 			$res = $this->db->select("list_items", array("name", "id", "checked"), "list=" . $this->id);
 			$this->items = array();
 			foreach ($res as $i => $row) {
-				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (boolean) $row["checked"]);
+				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (bool) $row["checked"]);
 			}
 		}
 	}
@@ -42,6 +48,9 @@
 		public $name=null;
 		public $id=null;
 		public $checked=null;
+		public $dueDate=null;
+		public $reminder=null;
+		public $severity=null;
 
 		private $db=null;
 		private $table=null;
@@ -51,7 +60,7 @@
 								todo $list=null,
 								string $name=null,
 								int $id=null,
-								boolean $checked=null){
+								bool $checked=null){
 			if(isset($db)){
 				$this->db = $db;
 			}else{
@@ -86,21 +95,51 @@
 	class listsPage extends Page{
 
 		public $lists = null;
+		protected $db=null;
 
 		public function __construct(){
 	        $this->name = "Lists";
 	        $this->pageId = "Lists";
 	        $this->svgIcon = "img/svg/list.svg";
+	        $this->db = new db();
 	    }
 
-		public function process(array $getParams, array $postParams): string{
-			$db = new db();
-			$res = $db->select("list", array("name", "id", "color"), "Archived=false");
+	    public function renderLists(): string{
+			$rows = array();
+			$engine = new templateEngine();
+			foreach ($this->lists as $i => $todoList) {
+				$iChecked = 0;
+				$iTotal = 0;
+				foreach ($todoList->items as $item) {
+					$iTotal++;
+					if($item->checked) $iChecked++;
+				}
+				$rows[] = $engine->render("list.all.row", Array("name" => $todoList->name, "Bcolor" => $todoList->Bcolor, "Tcolor" => "White", "itemsChecked" => $iChecked, "itemsTotal" => $iTotal));
+			}
+			return $engine->render("list.all", array("items" => implode("", $rows)));
+		}
+
+		public function displayListOfLists(bool $archived): string{
+			$res = $this->db->select("list", array("name", "id", "Bcolor", "Tcolor"), $archived ? "Archived=true" : "Archived=false");
 			$this->lists = array();
 			foreach ($res as $i => $row) {
-				$this->lists[] = new todo($db, $row["color"], $row["name"], (int) $row["id"]);
+				$this->lists[] = new todo($this->db, $row["Tcolor"], $row["Bcolor"], $row["name"], (int) $row["id"]);
+			}
+			return $this->renderLists();
+		}
+
+		public function displayList(int $id = null): string{
+			if(!isset($id)) return $this->displayListOfLists(false);
+			$res = $this->db->select("list", array("name", "Bcolor", "Tcolor"), "id=" . $id);
+			$this->lists = array();
+			foreach ($res as $i => $row) {
+				$this->lists[] = new todo($this->db, $row["Tcolor"], $row["Bcolor"], $row["name"], (int) $row["id"]);
 			}
 			return "";
+		}
+
+		public function process(array $getParams, array $postParams): string{
+			return $this->displayListOfLists(false);
 		}
 	}
 	
