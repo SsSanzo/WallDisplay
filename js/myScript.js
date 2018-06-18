@@ -17,7 +17,7 @@ function initiateNavigationmenu(){
 
 function initiateRssPopup(){
 	$(".rssStory").click(function(){
-		var content = $(this).find(".storyConten+t").html();
+		var content = $(this).find(".storyContent").html();
 		$("body").append("<div class='rssPopupBackground'></div><div class='rssPopup'><a class='rssPopupClose'>Close</a>" + content + "</div>");
 		$(".rssPopupClose").click(function(){
 			$(".rssPopup").remove();
