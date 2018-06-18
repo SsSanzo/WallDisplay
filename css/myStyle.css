@@ -124,7 +124,8 @@ div.rssContainer{
 	padding: 30px;
 	font-size: 28px;
 	height: fit-content;
-	overflow: scroll;
+	max-height: 90%;
+	overflow: auto;
 }
 
 .rssPopup img {
