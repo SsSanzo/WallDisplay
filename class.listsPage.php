@@ -41,6 +41,18 @@
 				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (bool) $row["checked"]);
 			}
 		}
+
+		public function load(): bool{
+			$res = $this->db->select("list", array("name", "id", "Bcolor", "Tcolor", "Archived"), "id=" . $this->id);
+			if(count($res)<1) return false;
+			$list = $res[0];
+			$this->Tcolor = $list["Tcolor"];
+			$this->Bcolor = $list["Bcolor"];
+			$this->name = $list["name"];
+			$this->id = $list["id"];
+			$this->archived = $list["Archived"];
+			return true;
+		}
 	}
 
 	class listItem{
@@ -81,13 +93,44 @@
 			if(isset($this->checked)){
 				$values["Checked"] = ($this->checked ? 1: 0);
 			}
-			var_dump($values);
 			$this->db->update(
 				$this->table,
 				$values,
 				$this->id
 			);
 
+		}
+
+		public function insert(){
+			$values = array();
+			$values["Name"] = "'" . $this->name . "'";
+			$values["list"] = "'" . $this->list->id . "'";
+			if($this->db->insert(
+				$this->table,
+				$values
+			)){
+				$this->id = $this->db->getInsertId();
+				$this->checked = false;
+				return true;
+			}
+			return false;
+		}
+
+		public function load(todo $list = null){
+			$res = $this->db->select("list_items", array("name", "id", "checked, list"), "id=" . $this->id);
+			if(count($res)<1) return false;
+			$item = $res[0];
+			if(isset($list)){
+				$this->list = $list;
+			}else{
+				$list = new todo($this->db, null, null, null, $item["list"], null);
+				$list->load();
+				$this->list = $list;
+			}
+			$this->name = $item["name"];
+			$this->id = $item["id"];
+			$this->checked = $item["checked"];
+			return true;
 		}
 	}
 
@@ -164,19 +207,34 @@
 		public function process(array $getParams, array $postParams): string{
 			if(isset($getParams["aQuery"])){
 				if(strcmp("updateItem", $getParams["aQuery"]) == 0){
+					if(!isset($getParams["id"])) return "Error: id missing";
 					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null);
+					return "OK";
 				}
 				if(strcmp("addItem", $getParams["aQuery"]) == 0){
-					// adding an item
+					if(!isset($getParams["name"]) || !isset($getParams["id"])) return "Error: name or id missing";
+					$engine = new templateEngine();
+					$db = new db();
+					$list = new todo($db, null, null, null, (int) $getParams["id"], null);
+					$item = new listItem($db, $list, $getParams["name"], null, null);
+					$item->insert();
+					return $engine->render("list.one.item", Array(
+						"id" => $item->id,
+						"name" => $item->name,
+						"checked" => $item->checked ? "checked" : "")
+					);
 				}
 				if(strcmp("addList", $getParams["aQuery"]) == 0){
 					// adding a list
+					return "OK";
 				}
 				if(strcmp("editList", $getParams["aQuery"]) == 0){
 					// editing a list
+					return "OK";
 				}
 				if(strcmp("archiveList", $getParams["aQuery"]) == 0){
 					// archiving a list
+					return "OK";
 				}
 			}
 			if(isset($getParams["lid"])) return $this->displayList((int) $getParams["lid"]);

@@ -75,7 +75,7 @@
 				return false;
 			}
 			$this->errormsg = "";
-			return $result->fetch_all(MYSQLI_ASSOC);
+			return true;
 		}
 
 		public function updateAll(string $table, array $values, string $condition){
@@ -174,6 +174,10 @@
 			}
 			$this->errormsg = "";
 			return $result;
+		}
+
+		public function getInsertId(): int{
+			return $this->connection->insert_id;
 		}
 	}
 ?>

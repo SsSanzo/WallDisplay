@@ -1,4 +1,4 @@
 <?php
 	include 'main.php';
-	processPage($pages, $_GET, $_POST);
+	echo processPage($pages, $_GET, $_POST);
 ?>

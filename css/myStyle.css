@@ -235,14 +235,9 @@ a.rssPopupClose{
   background-color: #eee;
 }
 
-/* On mouse-over, add a grey background color */
-.listItem:hover input ~ .checkmark {
-  background-color: #ccc;
-}
-
 /* When the checkbox is checked, add a blue background */
 .listItem input:checked ~ .checkmark {
-  background-color: #2196F3;
+  background-color: hsl(122, 39%, 49%);
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -268,4 +263,30 @@ a.rssPopupClose{
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.newItem input[type="text"] {
+    background: none;
+    height: 40px;
+    border: none;
+    color: white;
+    font-size: 36px;
+    border-bottom: 1px solid white;
+    width: 90%;
+}
+
+.newItem input:focus {
+    border: none;
+}
+
+::placeholder {
+    color: white !important;
+}
+
+.newItem button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 46px;
+    float: right;
 }
