@@ -273,7 +273,7 @@ a.rssPopupClose{
     color: white;
     font-size: 36px;
     border-bottom: 1px solid white;
-    width: 80%;
+    width: 90%;
 }
 
 .newItem input:focus {
@@ -290,4 +290,6 @@ a.rssPopupClose{
     color: white;
     font-size: 46px;
     float: right;
+    margin: 0;
+    padding: 0;
 }
