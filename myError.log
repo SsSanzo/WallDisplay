@@ -41,3 +41,15 @@
 [@DB] update=UPDATE list_items SET Checked=1 WHERE id=18
 [@DB] Select=SELECT name,Bcolor,Tcolor,id FROM list WHERE id=4
 [@DB] Select=SELECT name,id,checked FROM list_items WHERE list=4
+[@DB] Select=SELECT name,Bcolor,Tcolor,id FROM list WHERE id=4
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=4
+[@DB] Select=SELECT name,id,Bcolor,Tcolor FROM list WHERE Archived=false
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=3
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=4
+[@DB] Select=SELECT name,Bcolor,Tcolor,id FROM list WHERE id=3
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=3
+[@DB] Select=SELECT name,id,Bcolor,Tcolor FROM list WHERE Archived=false
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=3
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=4
+[@DB] Select=SELECT name,Bcolor,Tcolor,id FROM list WHERE id=4
+[@DB] Select=SELECT name,id,checked FROM list_items WHERE list=4
