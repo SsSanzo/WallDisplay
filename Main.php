@@ -1,6 +1,6 @@
 <?php
 
-	const ERROR_LOG_FILE = "error.log";
+	const ERROR_LOG_FILE = "myError.log";
 
 	include "interface.page.php";
 	include "class.db.php";

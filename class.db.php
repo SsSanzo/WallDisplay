@@ -39,7 +39,7 @@
 			if(isset($condition) and strlen($condition)>0){
 				$query .= " WHERE ". $condition;
 			}
-			error_log("[@DB] Select=".$query);
+			error_log("[@DB] Select=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() select error:". $query;
@@ -71,7 +71,7 @@
 			$query .= " VALUES (" . implode(",", $vals) . ")";
 
 
-			error_log("[@DB] insert=".$query);
+			error_log("[@DB] insert=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() insert error:". $query;
@@ -102,7 +102,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE " . $condition;
 
-			error_log("[@DB] updateAll=".$query);
+			error_log("[@DB] updateAll=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() updateAll error:". $query;
@@ -133,7 +133,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE id=" . $id;
 
-			error_log("[@DB] update=".$query);
+			error_log("[@DB] update=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() update error:". $query;
@@ -154,7 +154,7 @@
 			}
 			$query = "DELETE FROM " . $table . " WHERE ". $condition;
 
-			error_log("[@DB] deleteAll=".$query);
+			error_log("[@DB] deleteAll=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() deleteAll error:". $query;
@@ -175,7 +175,7 @@
 			}
 			$query = "DELETE FROM " . $table . " WHERE id=". $id;
 
-			error_log("[@DB] delete=".$query);
+			error_log("[@DB] delete=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() delete error:". $query;
@@ -187,6 +187,14 @@
 
 		public function getInsertId(): int{
 			return $this->connection->insert_id;
+		}
+
+		public function protectString(string $value = null){
+			if(isset($value)){
+				$value = filter_var($value, FILTER_SANITIZE_STRING);
+				$value = $this->connection->real_escape_string($value);
+			}
+			return $value;
 		}
 	}
 ?>

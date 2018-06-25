@@ -200,7 +200,8 @@
 
 		public function updateItem(int $id, bool $checked=null, string $name = null){
 			if(!isset($id)) return;
-			$item = new listItem(null, null, filter_var($name, FILTER_SANITIZE_STRING), $id, $checked);
+			$name = $this->db->protectString($name);
+			$item = new listItem(null, null, $name, $id, $checked);
 			$item->push();
 		}
 
@@ -216,7 +217,7 @@
 					$engine = new templateEngine();
 					$db = new db();
 					$list = new todo($db, null, null, null, (int) $getParams["id"], null);
-					$item = new listItem($db, $list, $getParams["name"], null, null);
+					$item = new listItem($db, $list, $this->db->protectString($getParams["name"]), null, null);
 					$item->insert();
 					return $engine->render("list.one.item", Array(
 						"id" => $item->id,
