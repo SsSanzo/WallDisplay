@@ -315,3 +315,49 @@ a.rssPopupClose{
 .listActions{
 	text-align: right;
 }
+
+.listSettingsContainer {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 70%);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.listSettings {
+    position: absolute;
+    top: 10%;
+    width: 50%;
+    margin-left: 25%;
+    background: black;
+    color: white;
+    padding: 25px;
+}
+
+.header {
+    font-size: 28px;
+}
+
+.listForm li {
+    display: block;
+    padding: 5px;
+}
+
+.listForm input {
+    width: 150px;
+}
+
+.listForm span {
+    width: 150px;
+    display: inline-block;
+}
+
+button.ListSettingsSubmit {
+    float: right;
+    color: white;
+    background: dodgerblue;
+    border: none;
+    width: 100px;
+    height: 35px;
+}

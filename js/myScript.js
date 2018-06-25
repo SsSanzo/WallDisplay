@@ -124,8 +124,20 @@ function initiateLists(){
 			}
 		});
 	});
+	//Add a list
+	$(".listAdd").click(function (){
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				aQuery: "addList",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				$("body").append(data);
+			}
+		});
+	});
 	//Settings List
-	//Add List
 
 }
 

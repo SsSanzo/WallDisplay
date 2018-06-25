@@ -273,7 +273,8 @@
 				}
 				if(strcmp("addList", $getParams["aQuery"]) == 0){
 					// adding a list
-					return "OK";
+					$engine = new templateEngine();
+					return $engine->render("list.settings", array());
 				}
 				if(strcmp("purgeList", $getParams["aQuery"]) == 0){
 					// purge a list
