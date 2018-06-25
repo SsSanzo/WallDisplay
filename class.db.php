@@ -39,6 +39,7 @@
 			if(isset($condition) and strlen($condition)>0){
 				$query .= " WHERE ". $condition;
 			}
+			error_log("[@DB] Select=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() select error:". $query;
@@ -69,6 +70,8 @@
 			$query .= " (" . implode(",", $cols) . ")";
 			$query .= " VALUES (" . implode(",", $vals) . ")";
 
+
+			error_log("[@DB] insert=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() insert error:". $query;
@@ -99,6 +102,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE " . $condition;
 
+			error_log("[@DB] updateAll=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() updateAll error:". $query;
@@ -129,6 +133,7 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE id=" . $id;
 
+			error_log("[@DB] update=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() update error:". $query;
@@ -148,6 +153,8 @@
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE ". $condition;
+
+			error_log("[@DB] deleteAll=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() deleteAll error:". $query;
@@ -167,6 +174,8 @@
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE id=". $id;
+
+			error_log("[@DB] delete=".$query);
 			$result = $this->connection->query($query);
 			if(!$result){
 				$this->errormsg = "db:select() delete error:". $query;

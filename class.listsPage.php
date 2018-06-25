@@ -200,7 +200,7 @@
 
 		public function updateItem(int $id, bool $checked=null, string $name = null){
 			if(!isset($id)) return;
-			$item = new listItem(null, null, $name, $id, $checked);
+			$item = new listItem(null, null, filter_var($name, FILTER_SANITIZE_STRING), $id, $checked);
 			$item->push();
 		}
 

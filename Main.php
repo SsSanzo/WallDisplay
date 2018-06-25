@@ -1,5 +1,7 @@
 <?php
 
+	const ERROR_LOG_FILE = "error.log";
+
 	include "interface.page.php";
 	include "class.db.php";
 	include "class.templateEngine.php";
