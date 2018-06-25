@@ -76,6 +76,38 @@ function initiateLists(){
 			}
 		});
 	});
+	//purge List
+	$("#listPurge").click(function (){
+		var id = $(this).attr("data-list");
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				id: id,
+				aQuery: "purgeList",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				$("#checkedItems").empty();
+			}
+		});
+	});
+	//archive List
+	$("#archiveList").click(function (){
+		var id = $(this).attr("data-list");
+		var newURL = '?pt=' + GetURLParameter("pt");
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				id: id,
+				aQuery: "archiveList",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				document.location = newURL;
+			}
+		});
+	});
+	//Settings List
 	//Add List
 
 }

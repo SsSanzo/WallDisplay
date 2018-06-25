@@ -14,7 +14,7 @@
 		public $items=null;
 
 		private $db=null;
-		private $table=null;
+		public static $table = "list";
 
 		public function __construct(
 								db $db=null,
@@ -28,14 +28,19 @@
 			}else{
 				$this->db = new db();
 			}
-			$this->table = "lists";
 			$this->Tcolor = $Tcolor;
 			$this->Bcolor = $Bcolor;
 			$this->name = $name;
 			$this->id = $id;
 			$this->archived = $archived;
 			/* generate list of items */
-			$res = $this->db->select("list_items", array("name", "id", "checked"), "list=" . $this->id);
+			$res = $this->db->select(listItem::$table, array("name", "id", "checked"), "list=" . $this->id);
+			if(is_bool($res)){
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get list of lists";
+				error_log("[".date("c")."] todo:__construct=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return "Error";
+			}
 			$this->items = array();
 			foreach ($res as $i => $row) {
 				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (bool) $row["checked"]);
@@ -43,8 +48,18 @@
 		}
 
 		public function load(): bool{
-			$res = $this->db->select("list", array("name", "id", "Bcolor", "Tcolor", "Archived"), "id=" . $this->id);
-			if(count($res)<1) return false;
+			$res = $this->db->select(self::$table, array("name", "id", "Bcolor", "Tcolor", "Archived"), "id=" . $this->id);
+			if(is_bool($res)){
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get list of lists";
+				error_log("[".date("c")."] todo:load=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return false;
+			}
+			if(count($res)<1){
+				$errmsg = "Could not find list";
+				error_log("[".date("c")."] todo:load=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return false;
+			}
 			$list = $res[0];
 			$this->Tcolor = $list["Tcolor"];
 			$this->Bcolor = $list["Bcolor"];
@@ -65,7 +80,7 @@
 		public $severity=null;
 
 		private $db=null;
-		private $table=null;
+		public static $table = "list_items";
 
 		public function __construct(
 								db $db=null,
@@ -78,7 +93,6 @@
 			}else{
 				$this->db = new db();
 			}
-			$this->table = "list_items";
 			$this->list = $list;
 			$this->name = $name;
 			$this->id = $id;
@@ -93,11 +107,15 @@
 			if(isset($this->checked)){
 				$values["Checked"] = ($this->checked ? 1: 0);
 			}
-			$this->db->update(
-				$this->table,
+			if(!$this->db->update(
+				self::$table,
 				$values,
 				$this->id
-			);
+			)){
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get insert list item";
+				error_log("[".date("c")."] listItem:push=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+			}
 
 		}
 
@@ -106,18 +124,22 @@
 			$values["Name"] = "'" . $this->name . "'";
 			$values["list"] = "'" . $this->list->id . "'";
 			if($this->db->insert(
-				$this->table,
+				self::$table,
 				$values
 			)){
 				$this->id = $this->db->getInsertId();
 				$this->checked = false;
 				return true;
+			}else{
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get insert list item";
+				error_log("[".date("c")."] listItem:insert=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return false;
 			}
-			return false;
 		}
 
 		public function load(todo $list = null){
-			$res = $this->db->select("list_items", array("name", "id", "checked, list"), "id=" . $this->id);
+			$res = $this->db->select(self::$table, array("name", "id", "checked, list"), "id=" . $this->id);
 			if(count($res)<1) return false;
 			$item = $res[0];
 			if(isset($list)){
@@ -180,7 +202,13 @@
 		}
 
 		public function displayListOfLists(bool $archived): string{
-			$res = $this->db->select("list", array("name", "id", "Bcolor", "Tcolor"), $archived ? "Archived=true" : "Archived=false");
+			$res = $this->db->select(todo::$table, array("name", "id", "Bcolor", "Tcolor"), $archived ? "Archived=true" : "Archived=false");
+			if(is_bool($res)){
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get list of lists";
+				error_log("[".date("c")."] listePage:displayListOfLists=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return "Error";
+			}
 			$this->lists = array();
 			foreach ($res as $i => $row) {
 				$this->lists[] = new todo($this->db, $row["Tcolor"], $row["Bcolor"], $row["name"], (int) $row["id"]);
@@ -190,7 +218,11 @@
 
 		public function displayList(int $id = null): string{
 			if(!isset($id)) return $this->displayListOfLists(false);
-			$res = $this->db->select("list", array("name", "Bcolor", "Tcolor", "id"), "id=" . $id);
+			$res = $this->db->select(todo::$table, array("name", "Bcolor", "Tcolor", "id"), "id=" . $id);
+			if(is_bool($res)){
+				var_dump($this->db->errormsg);
+				return "Error";
+			}
 			$this->lists = array();
 			foreach ($res as $i => $row) {
 				$this->lists[] = new todo($this->db, $row["Tcolor"], $row["Bcolor"], $row["name"], (int) $row["id"]);
@@ -208,12 +240,20 @@
 		public function process(array $getParams, array $postParams): string{
 			if(isset($getParams["aQuery"])){
 				if(strcmp("updateItem", $getParams["aQuery"]) == 0){
-					if(!isset($getParams["id"])) return "Error: id missing";
+					if(!isset($getParams["id"])){
+						$errmsg = "Error: id missing";
+						error_log("[".date("c")."] listePage:process=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return $errmsg;
+					}
 					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null);
 					return "OK";
 				}
 				if(strcmp("addItem", $getParams["aQuery"]) == 0){
-					if(!isset($getParams["name"]) || !isset($getParams["id"])) return "Error: name or id missing";
+					if(!isset($getParams["name"]) || !isset($getParams["id"])){
+						$errmsg = "Error: name or id missing";
+						error_log("[".date("c")."] listePage:process=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return $errmsg;
+					}
 					$engine = new templateEngine();
 					$db = new db();
 					$list = new todo($db, null, null, null, (int) $getParams["id"], null);
@@ -229,13 +269,70 @@
 					// adding a list
 					return "OK";
 				}
+				if(strcmp("purgeList", $getParams["aQuery"]) == 0){
+					// purge a list
+					$db = new db();
+					$listId = (int) $getParams["id"];
+					if(isset($listId)){
+						$db->deleteAll(listItem::$table, "checked=1 AND list=".$listId);
+						if(is_bool($res)){
+							var_dump($this->db->errormsg);
+							$errmsg = "Could not purge list";
+							error_log("[".date("c")."] listePage:process{purgeList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+							return "Error";
+						}
+						return "OK";
+					}else{
+						$errmsg= "Error, the id is unknown, or couldn't be converted: ".$getParams["id"]."=>".$listId;
+						error_log("[".date("c")."] listePage:process=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return "Error:".$errmsg;
+					}
+				}
+				if(strcmp("openSettings", $getParams["aQuery"]) == 0){
+					// Opening Settings of a list
+					return "OK";
+				}
 				if(strcmp("editList", $getParams["aQuery"]) == 0){
 					// editing a list
 					return "OK";
 				}
 				if(strcmp("archiveList", $getParams["aQuery"]) == 0){
 					// archiving a list
-					return "OK";
+					$db = new db();
+					$listId = (int) $getParams["id"];
+					if(isset($listId)){
+						if($db->update(todo::$table, array("Archived=1"), $listId)){
+							return "OK";
+						}else{
+							var_dump($this->db->errormsg);
+							$errmsg = "Could not archive list";
+							error_log("[".date("c")."] listePage:process{archiveList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+							return "Error";
+						}
+					}else{
+						$errmsg= "Error, the id is unknown, or couldn't be converted: ".$getParams["id"]."=>".$listId;
+						error_log("[".date("c")."] listePage:process=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return "Error:".$errmsg;
+					}
+				}
+				if(strcmp("restoreList", $getParams["aQuery"]) == 0){
+					// restore a list
+					$db = new db();
+					$listId = (int) $getParams["id"];
+					if(isset($listId)){
+						if($db->update(todo::$table, array("Archived=10"), $listId)){
+							return "OK";
+						}else{
+							var_dump($this->db->errormsg);
+							$errmsg = "Could not archive list";
+							error_log("[".date("c")."] listePage:process{archiveList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+							return "Error";
+						}
+					}else{
+						$errmsg= "Error, the id is unknown, or couldn't be converted: ".$getParams["id"]."=>".$listId;
+						error_log("[".date("c")."] listePage:process=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return "Error:".$errmsg;
+					}
 				}
 			}
 			if(isset($getParams["lid"])) return $this->displayList((int) $getParams["lid"]);

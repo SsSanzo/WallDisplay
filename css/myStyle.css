@@ -295,7 +295,9 @@ a.rssPopupClose{
 }
 
 .listHeaderIcon {
-    height: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    cursor: pointer;
 }
 
 .listActions{

@@ -1,8 +1,8 @@
 <div class="todoContainer">
 	<div class="listActions">
-		<img src='img/svg/listPurge.svg' data-list='{{listId}}' class='listHeaderIcon'/>
-		<img src='img/svg/delete.svg' data-list='{{listId}}' class='listHeaderIcon'/>
-		<img src='img/svg/settings.svg' data-list='{{listId}}' class='listHeaderIcon'/>
+		<img src='img/svg/listPurge.svg' data-list='{{id}}' class='listHeaderIcon' id="listPurge"/>
+		<img src='img/svg/archive.svg' data-list='{{id}}' class='listHeaderIcon' id="archiveList"/>
+		<img src='img/svg/settings.svg' data-list='{{id}}' class='listHeaderIcon' id="listSettings"/>
 	</div>
 	<div class="listHeader" data-id="{{id}}" style="background-color: {{Bcolor}}; Color: {{Tcolor}};">{{name}}</div>
 	<div id="uncheckedItems">{{items}}</div>
