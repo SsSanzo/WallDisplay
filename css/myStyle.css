@@ -345,12 +345,13 @@ a.rssPopupClose{
 }
 
 .listForm input {
-    width: 150px;
+    width: 250px;
     height: 30px;
+    font-size: 28px;
 }
 
 .listForm span {
-    width: 150px;
+    width: 250px;
     display: inline-block;
     font-size: 28px;
 }
