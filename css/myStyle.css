@@ -328,11 +328,11 @@ a.rssPopupClose{
 .listSettings {
     position: absolute;
     top: 10%;
-    width: 50%;
-    margin-left: 25%;
+    width: 90%;
+    margin-left: 3%;
     background: black;
     color: white;
-    padding: 25px;
+    padding: 2%;
 }
 
 .header {
