@@ -107,6 +107,23 @@ function initiateLists(){
 			}
 		});
 	});
+
+	//restore List
+	$("#restoreList").click(function (){
+		var id = $(this).attr("data-list");
+		var newURL = '?pt=' + GetURLParameter("pt");
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				id: id,
+				aQuery: "restoreList",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				document.location = newURL;
+			}
+		});
+	});
 	//Settings List
 	//Add List
 

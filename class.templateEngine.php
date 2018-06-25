@@ -15,6 +15,8 @@
 	        	"list.all.row" => "templates/list.all.row.html",
 	        	"list.one" => "templates/list.one.html",
 	        	"list.one.item" => "templates/list.one.item.html",
+	        	"list.archived.one" => "templates/list.archived.one.html",
+	        	"list.archived.one.item" => "templates/list.archived.one.item.html",
 	        	"list.settings" => "templates/list.settings.html"
 	        );
 	    }
