@@ -277,7 +277,7 @@
 						$db->deleteAll(listItem::$table, "checked=1 AND list=".$listId);
 						if(is_bool($res)){
 							var_dump($this->db->errormsg);
-							$errmsg = "Could not purge list";
+							$errmsg = "Could not purge list: " . $this->db->errormsg;
 							error_log("[".date("c")."] listePage:process{purgeList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
 							return "Error";
 						}
@@ -301,11 +301,11 @@
 					$db = new db();
 					$listId = (int) $getParams["id"];
 					if(isset($listId)){
-						if($db->update(todo::$table, array("Archived=1"), $listId)){
+						if($db->update(todo::$table, array("Archived" => 1), $listId)){
 							return "OK";
 						}else{
 							var_dump($this->db->errormsg);
-							$errmsg = "Could not archive list";
+							$errmsg = "Could not archive list: ". $this->db->errormsg;
 							error_log("[".date("c")."] listePage:process{archiveList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
 							return "Error";
 						}
@@ -320,11 +320,11 @@
 					$db = new db();
 					$listId = (int) $getParams["id"];
 					if(isset($listId)){
-						if($db->update(todo::$table, array("Archived=10"), $listId)){
+						if($db->update(todo::$table, array("Archived" => 0), $listId)){
 							return "OK";
 						}else{
 							var_dump($this->db->errormsg);
-							$errmsg = "Could not archive list";
+							$errmsg = "Could not restore list". $this->db->errormsg;
 							error_log("[".date("c")."] listePage:process{archiveList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
 							return "Error";
 						}
