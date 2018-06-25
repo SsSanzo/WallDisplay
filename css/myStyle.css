@@ -336,7 +336,7 @@ a.rssPopupClose{
 }
 
 .header {
-    font-size: 28px;
+    font-size: 46px;
 }
 
 .listForm li {
@@ -346,11 +346,13 @@ a.rssPopupClose{
 
 .listForm input {
     width: 150px;
+    height: 30px;
 }
 
 .listForm span {
     width: 150px;
     display: inline-block;
+    font-size: 28px;
 }
 
 button.ListSettingsSubmit {
