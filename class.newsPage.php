@@ -16,13 +16,21 @@
 	    }
 
 		public function displayFeed($feedURL = "", $feedname = null): string{
-			If(strcmp("", $feedURL)==0) return "newsPage:displayFeed() no feed to display";
+			If(strcmp("", $feedURL)==0){
+				$errmsg = "newsPage:displayFeed() no feed to display";
+				error_log($errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return $errmsg;
+			}
 
 			$engine = new templateEngine();
 			$buffer = array();
 
 			$xmlDoc = new DOMDocument();
-			if(!$xmlDoc->load($feedURL)) return "newsPage:displayFeed() unable to load RSS feed";
+			if(!$xmlDoc->load($feedURL)){
+				$errmsg = "newsPage:displayFeed() unable to load RSS feed";
+				error_log($errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return $errmsg;
+			}
 			$xmlDoc->normalize();
 
 			$channel=$xmlDoc->getElementsByTagName('channel')->item(0);

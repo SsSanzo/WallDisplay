@@ -1,4 +1,9 @@
 <div class="todoContainer">
+	<div class="listActions">
+		<img src='img/svg/listPurge.svg' data-list='{{listId}}' class='listHeaderIcon'/>
+		<img src='img/svg/delete.svg' data-list='{{listId}}' class='listHeaderIcon'/>
+		<img src='img/svg/settings.svg' data-list='{{listId}}' class='listHeaderIcon'/>
+	</div>
 	<div class="listHeader" data-id="{{id}}" style="background-color: {{Bcolor}}; Color: {{Tcolor}};">{{name}}</div>
 	<div id="uncheckedItems">{{items}}</div>
 	<div class="newItem"><input type="text" placeholder="Add a new Item" name="newItem"/><button>+</button></div>

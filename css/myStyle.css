@@ -61,7 +61,7 @@ div.rssContainer{
 
 .rssContainer > div:last-child{
     height: 250px;
-    overflow: overlay;
+    overflow: auto;
 }
 
 .rssContainer p{
@@ -292,4 +292,12 @@ a.rssPopupClose{
     float: right;
     margin: 0;
     padding: 0;
+}
+
+.listHeaderIcon {
+    height: 36px;
+}
+
+.listActions{
+	text-align: right;
 }

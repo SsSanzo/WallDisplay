@@ -14,7 +14,8 @@
 	        	"list.all" => "templates/list.all.html",
 	        	"list.all.row" => "templates/list.all.row.html",
 	        	"list.one" => "templates/list.one.html",
-	        	"list.one.item" => "templates/list.one.item.html"
+	        	"list.one.item" => "templates/list.one.item.html",
+	        	"list.settings" => "templates/list.settings.html"
 	        );
 	    }
 
@@ -27,7 +28,9 @@
 				}
 				return $data;
 			}else{
-				 return "templateEngine:render() template does not exist";
+				$errmsg = "templateEngine:render(" . $templateId . ") template does not exist";
+				error_log($errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return $errmsg;
 			}
 		}
 	}
