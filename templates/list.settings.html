@@ -1,12 +1,13 @@
 <div class="listSettingsContainer">
 	<div class="listSettings">
-		<div class="header">List Settings</div>
+		<div class="header" style="color: {{TColor}};background-color: {{BColor}};">List Settings</div>
 		<div class="listForm">
 			<ul>
-				<li><span>Name</span><input type="text" name="name"></li>
-				<li><span>Text Color</span><input type="color" name="TextColor"></li>
-				<li><span>Background Color</span><input type="color" name="BackgroundColor"></li>
+				<li><span>Name</span><input type="text" id="name" name="name" value="{{Name}}"></li>
+				<li><span>Text Color</span><input type="color" id="TextColor" name="TextColor" value="{{TColor}}"></li>
+				<li><span>Background Color</span><input type="color" id="BackgroundColor" name="BackgroundColor" value="{{BColor}}"></li>
 			</ul>
+			<input type="hidden" name="id" value="{{listId}}"/>
 			<button class="ListSettingsSubmit">Submit</button>
 		</div>
 	</div>

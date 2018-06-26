@@ -22,7 +22,8 @@
 								string $Bcolor=null,
 								string $name=null,
 								int $id=null,
-								bool $archived=null){
+								bool $archived=null,
+								bool $loadItems = true){
 			if(isset($db)){
 				$this->db = $db;
 			}else{
@@ -34,16 +35,18 @@
 			$this->id = $id;
 			$this->archived = $archived;
 			/* generate list of items */
-			$res = $this->db->select(listItem::$table, array("name", "id", "checked"), "list=" . $this->id);
-			if(is_bool($res)){
-				var_dump($this->db->errormsg);
-				$errmsg = "Could not get list of lists";
-				error_log("[".date("c")."] todo:__construct=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
-				return "Error";
-			}
-			$this->items = array();
-			foreach ($res as $i => $row) {
-				$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (bool) $row["checked"]);
+			if($loadItems){
+				$res = $this->db->select(listItem::$table, array("name", "id", "checked"), "list=" . $this->id);
+				if(is_bool($res)){
+					var_dump($this->db->errormsg);
+					$errmsg = "Could not get list of lists";
+					error_log("[".date("c")."] todo:__construct=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+					return "Error";
+				}
+				$this->items = array();
+				foreach ($res as $i => $row) {
+					$this->items[] = new listItem($db, $this, $row["name"], (int) $row["id"], (bool) $row["checked"]);
+				}
 			}
 		}
 
@@ -67,6 +70,55 @@
 			$this->id = $list["id"];
 			$this->archived = $list["Archived"];
 			return true;
+		}
+
+		public function insert(){
+			$values = array();
+			if(isset($this->Tcolor)) $values["Tcolor"] = "'" . $this->Tcolor . "'";
+			if(isset($this->Bcolor)) $values["Bcolor"] = "'" . $this->Bcolor . "'";
+			if(isset($this->name)) $values["name"] = "'" . $this->name . "'";
+			if(isset($this->archived)) $values["archived"] = $this->archived ? 1: 0;
+			if($this->db->insert(
+				self::$table,
+				$values
+			)){
+				$this->id = $this->db->getInsertId();
+				if(!isset($this->archived))  $this->archived = false;
+				return true;
+			}else{
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get insert list";
+				error_log("[".date("c")."] todo:insert=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return false;
+			}
+		}
+
+		public function push(){
+			$values = array();
+			if(isset($this->TColor)){
+				$values["Tcolor"] = "'" . $this->Tcolor . "'";
+			}
+			if(isset($this->Bcolor)){
+				$values["Bcolor"] = "'" . $this->Bcolor . "'";
+			}
+			if(isset($this->name)){
+				$values["name"] = "'" . $this->name . "'";
+			}
+			if(isset($this->archived)){
+				$values["archived"] = $this->archived ? 1: 0;
+			}
+			if($this->db->update(
+				self::$table,
+				$values,
+				$this->id
+			)){
+				return true;
+			}else{
+				var_dump($this->db->errormsg);
+				$errmsg = "Could not get push list";
+				error_log("[".date("c")."] todo:push=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				return false;
+			}
 		}
 	}
 
@@ -105,7 +157,7 @@
 				$values["Name"] = "'" . $this->name . "'";
 			}
 			if(isset($this->checked)){
-				$values["Checked"] = ($this->checked ? 1: 0);
+				$values["Checked"] = $this->checked ? 1: 0;
 			}
 			if(!$this->db->update(
 				self::$table,
@@ -273,8 +325,55 @@
 				}
 				if(strcmp("addList", $getParams["aQuery"]) == 0){
 					// adding a list
-					$engine = new templateEngine();
-					return $engine->render("list.settings", array());
+					if(strcmp("add", $getParams["aSubQuery"]) == 0){
+						$db = new db();
+						$colorRegEx = "/#([0-9]|[a-f]|[A-F]){6}/";
+
+						var_dump($getParams);
+
+						$id = (int) $getParams["id"];
+						$name = (string) $getParams["name"];
+						$TColor = (string) $getParams["TColor"];
+						$BColor = (string) $getParams["BColor"];
+
+						$name = $db->protectString($name);
+						if(preg_match($colorRegEx, $TColor) == 0){
+							$TColor = "#000000";
+						}
+						if(preg_match($colorRegEx, $BColor) == 0){
+							$BColor = "#ffffff";
+						}
+						if(strlen($name)<1){
+							$name = "New List";
+						}
+
+						error_log("1-TColor:".$TColor.PHP_EOL, 3, ERROR_LOG_FILE);
+						error_log("1-BColor:".$BColor.PHP_EOL, 3, ERROR_LOG_FILE);
+						error_log("1-name:".$name.PHP_EOL, 3, ERROR_LOG_FILE);
+
+						$list = new todo($db, $TColor, $BColor, $name, null, null, false);
+
+						error_log("2-TColor:".$list->Tcolor.PHP_EOL, 3, ERROR_LOG_FILE);
+						error_log("2-BColor:".$list->Bcolor.PHP_EOL, 3, ERROR_LOG_FILE);
+						error_log("2-name:".$list->name.PHP_EOL, 3, ERROR_LOG_FILE);
+
+						$list->insert();
+						return "OK";
+						
+					}else if(strcmp("open", $getParams["aSubQuery"]) == 0){
+						$engine = new templateEngine();
+						return $engine->render("list.settings", array(
+							"listId" => "null",
+							"Name" => "New List",
+							"TColor" => "#000000",
+							"BColor" => "#ffffff"
+					));
+					}else{
+						$errmsg = "addList: unkown action";
+						error_log("[".date("c")."] listePage:process{addList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+						return "Error";
+					}
+					
 				}
 				if(strcmp("purgeList", $getParams["aQuery"]) == 0){
 					// purge a list

@@ -330,9 +330,10 @@ a.rssPopupClose{
     top: 10%;
     width: 90%;
     margin-left: 3%;
-    background: black;
-    color: white;
+    background: white;
+    color: black;
     padding: 2%;
+    border-radius: 10px;
 }
 
 .header {
@@ -361,6 +362,8 @@ button.ListSettingsSubmit {
     color: white;
     background: dodgerblue;
     border: none;
-    width: 100px;
-    height: 35px;
+    width: 150px;
+    height: 50px;
+    font-size: 28px;
+    cursor: pointer;
 }

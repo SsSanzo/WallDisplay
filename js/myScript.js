@@ -49,6 +49,42 @@ function checkBoxhandler(){
 	}
 }
 
+function initiateListFormColorChange(){
+	$(".listForm input[type='color']").change(function(){
+		$(".listSettings .header").css("color", $("#TextColor").val());
+		$(".listSettings .header").css("background-color", $("#BackgroundColor").val());
+	});
+}
+
+function initiateListFormSubmitButton(){
+	$(".ListSettingsSubmit").click(function(){
+		var listName = $(".listForm #name").val();
+		var listTColor = $(".listForm #TextColor").val();
+		var listBColor = $(".listForm #BackgroundColor").val();
+		var listId = $(".listForm #id").val();
+		var newURL = '?pt=' + GetURLParameter("pt");
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				id: listId,
+				name: listName,
+				TColor: listTColor,
+				BColor: listBColor,
+				aQuery: "addList",
+				aSubQuery: "add",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				document.location = newURL;
+			},
+			error : function(data, textStatus){
+				$(".listSettingsContainer").detach();
+				alert("Could not add the list")
+			}
+		});
+	});
+}
+
 function initiateLists(){
 	//Navigation
 	$(".list").click(function(){
@@ -130,14 +166,18 @@ function initiateLists(){
 			url: 'ajax.php?pt=' + GetURLParameter("pt"),
 			data : {
 				aQuery: "addList",
+				aSubQuery: "open",
 				page: GetURLParameter("pt")
 			},
 			success : function(data, textStatus){
 				$("body").append(data);
+				initiateListFormColorChange();
+				initiateListFormSubmitButton();
 			}
 		});
 	});
 	//Settings List
+
 
 }
 
