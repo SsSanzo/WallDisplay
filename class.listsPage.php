@@ -325,7 +325,7 @@
 				}
 				if(strcmp("addList", $getParams["aQuery"]) == 0){
 					// adding a list
-					if(isset($getParams["aSubQuery"]){
+					if(isset($getParams["aSubQuery"])){
 						if(strcmp("add", $getParams["aSubQuery"]) == 0){
 							$db = new db();
 							$colorRegEx = "/#([0-9]|[a-f]|[A-F]){6}/";
