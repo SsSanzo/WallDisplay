@@ -26,26 +26,29 @@
 			$this->connection->close();
 		}
 
-		public function select(string $table, array $values, string $condition){
+		public function select(string $table, array $values, string $condition=null, string $orderBy=null){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "select", "db");
 				return false;
 			}
 			if(!isset($values) or count($values)==0){
-				$this->errormsg = "db:select() argument $values is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $values is null or empty";
+				logger::logError($this->errormsg, "select", "db");
 				return false;
 			}
 			$query = "SELECT " . implode(",", $values) . " FROM " . $table;
 			if(isset($condition) and strlen($condition)>0){
 				$query .= " WHERE ". $condition;
 			}
-			error_log("[".date("c")."] [@DB] Select=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			if(isset($orderBy) and strlen($orderBy)>0){
+				$query .= " ORDER BY ". $orderBy;
+			}
+			logger::logDB($query, "Select");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() select error:". $query;
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "select error:". $query;
+				logger::logError($this->errormsg, "select", "db");
 				return false;
 			}
 			$this->errormsg = "";
@@ -54,13 +57,13 @@
 
 		public function insert(string $table, array $values){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "insert", "db");
 				return false;
 			}
 			if(!isset($values) or count($values)==0){
-				$this->errormsg = "db:select() argument $values is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $values is null or empty";
+				logger::logError($this->errormsg, "select", "db");
 				return false;
 			}
 			$query = "INSERT INTO " . $table;
@@ -75,12 +78,11 @@
 			$query .= " (" . implode(",", $cols) . ")";
 			$query .= " VALUES (" . implode(",", $vals) . ")";
 
-
-			error_log("[".date("c")."] [@DB] insert=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			logger::logDB($query, "insert");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() insert error:". $query;
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "insert error:". $query;
+				logger::logError($this->errormsg, "insert", "db");
 				return false;
 			}
 			$this->errormsg = "";
@@ -89,18 +91,18 @@
 
 		public function updateAll(string $table, array $values, string $condition){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "updateAll", "db");
 				return false;
 			}
 			if(!isset($values) or count($values)==0){
-				$this->errormsg = "db:select() argument $values is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $values is null or empty";
+				logger::logError($this->errormsg, "updateAll", "db");
 				return false;
 			}
 			if(!isset($condition) or strlen($condition)==0){
-				$this->errormsg = "db:select() argument $condition is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $condition is null or empty";
+				logger::logError($this->errormsg, "updateAll", "db");
 				return false;
 			}
 			$query = "UPDATE " . $table;
@@ -111,10 +113,11 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE " . $condition;
 
-			error_log("[".date("c")."] [@DB] updateAll=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			logger::logDB($query, "updateAll");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() updateAll error:". $query;
+				$this->errormsg = "updateAll error:". $query;
+				logger::logError($this->errormsg, "updateAll", "db");
 				return $result;
 			}
 			$this->errormsg = "";
@@ -123,18 +126,18 @@
 
 		public function update(string $table, array $values, int $id){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "update", "db");
 				return false;
 			}
 			if(!isset($values) or count($values)==0){
-				$this->errormsg = "db:select() argument $values is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $values is null or empty";
+				logger::logError($this->errormsg, "update", "db");
 				return false;
 			}
 			if(!isset($id) or $id<1){
-				$this->errormsg = "db:select() argument $id is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $id is null or empty";
+				logger::logError($this->errormsg, "update", "db");
 				return false;
 			}
 			$query = "UPDATE " . $table;
@@ -145,10 +148,11 @@
 			$query .= " SET " . implode(",", $updtValues);
 			$query .= " WHERE id=" . $id;
 
-			error_log("[".date("c")."] [@DB] update=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			logger::logDB($query, "update");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() update error:". $query;
+				$this->errormsg = "update error:". $query;
+				logger::logError($this->errormsg, "update", "db");
 				return $result;
 			}
 			$this->errormsg = "";
@@ -157,22 +161,22 @@
 
 		public function deleteAll(string $table, string $condition){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "deleteAll", "db");
 				return false;
 			}
 			if(!isset($condition) or strlen($condition)==0){
-				$this->errormsg = "db:select() argument $condition is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $condition is null or empty";
+				logger::logError($this->errormsg, "deleteAll", "db");
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE ". $condition;
 
-			error_log("[".date("c")."] [@DB] deleteAll=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			logger::logDB($query, "deleteAll");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() deleteAll error:". $query;
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "deleteAll error:". $query;
+				logger::logError($this->errormsg, "deleteAll", "db");
 				return $result;
 			}
 			$this->errormsg = "";
@@ -181,21 +185,22 @@
 
 		public function delete(string $table, int $id){
 			if(!isset($table) or strlen($table)==0){
-				$this->errormsg = "db:select() argument $table is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $table is null or empty";
+				logger::logError($this->errormsg, "delete", "db");
 				return false;
 			}
 			if(!isset($id) or $id<1){
-				$this->errormsg = "db:select() argument $id is null or empty";
-				error_log("[".date("c")."] [@DB] Select=".$this->errormsg.PHP_EOL, 3, ERROR_LOG_FILE);
+				$this->errormsg = "argument $id is null or empty";
+				logger::logError($this->errormsg, "delete", "db");
 				return false;
 			}
 			$query = "DELETE FROM " . $table . " WHERE id=". $id;
 
-			error_log("[".date("c")."] [@DB] delete=".$query.PHP_EOL, 3, ERROR_LOG_FILE);
+			logger::logDB($query, "delete");
 			$result = $this->connection->query($query);
 			if(!$result){
-				$this->errormsg = "db:select() delete error:". $query;
+				$this->errormsg = "delete error:". $query;
+				logger::logError($this->errormsg, "delete", "db");
 				return $result;
 			}
 			$this->errormsg = "";
