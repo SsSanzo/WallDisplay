@@ -56,13 +56,16 @@ function initiateListFormColorChange(){
 	});
 }
 
-function initiateListFormSubmitButton(){
+function initiateListFormSubmitButton(action){
+	if(typeof action != "string"){
+		return false;
+	}
 	$(".ListSettingsSubmit").click(function(){
 		var listName = $(".listForm #name").val();
 		var listTColor = $(".listForm #TextColor").val();
 		var listBColor = $(".listForm #BackgroundColor").val();
 		var listId = $(".listForm #id").val();
-		var newURL = '?pt=' + GetURLParameter("pt");
+		var newURL = '?pt=' + GetURLParameter("pt") + "&lid=" + listId;
 		$.ajax({
 			url: 'ajax.php?pt=' + GetURLParameter("pt"),
 			data : {
@@ -71,7 +74,7 @@ function initiateListFormSubmitButton(){
 				TColor: listTColor,
 				BColor: listBColor,
 				aQuery: "addList",
-				aSubQuery: "add",
+				aSubQuery: action,
 				page: GetURLParameter("pt")
 			},
 			success : function(data, textStatus){
@@ -79,7 +82,7 @@ function initiateListFormSubmitButton(){
 			},
 			error : function(data, textStatus){
 				$(".listSettingsContainer").detach();
-				alert("Could not add the list")
+				alert("Could not update the list")
 			}
 		});
 	});
@@ -172,12 +175,27 @@ function initiateLists(){
 			success : function(data, textStatus){
 				$("body").append(data);
 				initiateListFormColorChange();
-				initiateListFormSubmitButton();
+				initiateListFormSubmitButton("add");
 			}
 		});
 	});
 	//Settings List
-
+	$("#listSettings").click(function (){
+		$.ajax({
+			url: 'ajax.php?pt=' + GetURLParameter("pt"),
+			data : {
+				id: GetURLParameter("lid"),
+				aQuery: "addList",
+				aSubQuery: "open",
+				page: GetURLParameter("pt")
+			},
+			success : function(data, textStatus){
+				$("body").append(data);
+				initiateListFormColorChange();
+				initiateListFormSubmitButton("update");
+			}
+		});
+	});
 
 }
 
