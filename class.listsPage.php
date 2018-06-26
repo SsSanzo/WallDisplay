@@ -325,51 +325,57 @@
 				}
 				if(strcmp("addList", $getParams["aQuery"]) == 0){
 					// adding a list
-					if(strcmp("add", $getParams["aSubQuery"]) == 0){
-						$db = new db();
-						$colorRegEx = "/#([0-9]|[a-f]|[A-F]){6}/";
+					if(isset($getParams["aSubQuery"]){
+						if(strcmp("add", $getParams["aSubQuery"]) == 0){
+							$db = new db();
+							$colorRegEx = "/#([0-9]|[a-f]|[A-F]){6}/";
 
-						var_dump($getParams);
+							var_dump($getParams);
 
-						$id = (int) $getParams["id"];
-						$name = (string) $getParams["name"];
-						$TColor = (string) $getParams["TColor"];
-						$BColor = (string) $getParams["BColor"];
+							$id = (int) $getParams["id"];
+							$name = (string) $getParams["name"];
+							$TColor = (string) $getParams["TColor"];
+							$BColor = (string) $getParams["BColor"];
 
-						$name = $db->protectString($name);
-						if(preg_match($colorRegEx, $TColor) == 0){
-							$TColor = "#000000";
+							$name = $db->protectString($name);
+							if(preg_match($colorRegEx, $TColor) == 0){
+								$TColor = "#000000";
+							}
+							if(preg_match($colorRegEx, $BColor) == 0){
+								$BColor = "#ffffff";
+							}
+							if(strlen($name)<1){
+								$name = "New List";
+							}
+
+							error_log("1-TColor:".$TColor.PHP_EOL, 3, ERROR_LOG_FILE);
+							error_log("1-BColor:".$BColor.PHP_EOL, 3, ERROR_LOG_FILE);
+							error_log("1-name:".$name.PHP_EOL, 3, ERROR_LOG_FILE);
+
+							$list = new todo($db, $TColor, $BColor, $name, null, null, false);
+
+							error_log("2-TColor:".$list->Tcolor.PHP_EOL, 3, ERROR_LOG_FILE);
+							error_log("2-BColor:".$list->Bcolor.PHP_EOL, 3, ERROR_LOG_FILE);
+							error_log("2-name:".$list->name.PHP_EOL, 3, ERROR_LOG_FILE);
+
+							$list->insert();
+							return "OK";
+							
+						}else if(strcmp("open", $getParams["aSubQuery"]) == 0){
+							$engine = new templateEngine();
+							return $engine->render("list.settings", array(
+								"listId" => "null",
+								"Name" => "New List",
+								"TColor" => "#000000",
+								"BColor" => "#ffffff"
+						));
+						}else{
+							$errmsg = "addList: unkown action";
+							error_log("[".date("c")."] listePage:process{addList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
+							return "Error";
 						}
-						if(preg_match($colorRegEx, $BColor) == 0){
-							$BColor = "#ffffff";
-						}
-						if(strlen($name)<1){
-							$name = "New List";
-						}
-
-						error_log("1-TColor:".$TColor.PHP_EOL, 3, ERROR_LOG_FILE);
-						error_log("1-BColor:".$BColor.PHP_EOL, 3, ERROR_LOG_FILE);
-						error_log("1-name:".$name.PHP_EOL, 3, ERROR_LOG_FILE);
-
-						$list = new todo($db, $TColor, $BColor, $name, null, null, false);
-
-						error_log("2-TColor:".$list->Tcolor.PHP_EOL, 3, ERROR_LOG_FILE);
-						error_log("2-BColor:".$list->Bcolor.PHP_EOL, 3, ERROR_LOG_FILE);
-						error_log("2-name:".$list->name.PHP_EOL, 3, ERROR_LOG_FILE);
-
-						$list->insert();
-						return "OK";
-						
-					}else if(strcmp("open", $getParams["aSubQuery"]) == 0){
-						$engine = new templateEngine();
-						return $engine->render("list.settings", array(
-							"listId" => "null",
-							"Name" => "New List",
-							"TColor" => "#000000",
-							"BColor" => "#ffffff"
-					));
 					}else{
-						$errmsg = "addList: unkown action";
+						$errmsg = "addList: no action defined";
 						error_log("[".date("c")."] listePage:process{addList}=".$errmsg.PHP_EOL, 3, ERROR_LOG_FILE);
 						return "Error";
 					}
