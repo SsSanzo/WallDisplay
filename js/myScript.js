@@ -9,9 +9,16 @@ function GetURLParameter(sParam){
     }
 }
 
+function cancelDrag(event) {
+  if (event.preventDefault) {
+    event.preventDefault();
+  }
+  return false;
+}
+
 function initiateNavigationmenu(){
 	$(".headerIcon").click(function(){
-		document.location = window.location.pathname + "?pt=" + $(this).attr("data-page");
+		document.location = "?pt=" + $(this).attr("data-page");
 	});
 }
 
@@ -91,8 +98,22 @@ function initiateListFormSubmitButton(action){
 function initiateLists(){
 	//Navigation
 	$(".list").click(function(){
-		document.location = window.location.pathname + "?pt=" + GetURLParameter("pt") + "&lid=" + $(this).attr("data-id");
+		document.location ="?pt=" + GetURLParameter("pt") + "&lid=" + $(this).attr("data-id");
 	});
+
+	//Sort Items
+	var drop = $("#uncheckedItems[drop='true']");
+	drop.bind("dragover", cancelDrag);
+	drop.bind("dragenter", cancelDrag);
+	drop.bind("drop", function(e){
+		if (e.preventDefault) {
+		    e.preventDefault(); 
+		  }
+
+		  this.innerHTML += '<p>' + e.dataTransfer.getData('Text') + '</p>';
+	});
+	// $(".listItem[draggable='true']");
+
 
 	//check boxes
 	$(".listItem input[type='checkbox']").change(checkBoxhandler);

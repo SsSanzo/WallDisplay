@@ -296,10 +296,10 @@
 			return $this->renderSingleLists();
 		}
 
-		public function updateItem(int $id, bool $checked=null, string $name = null){
+		public function updateItem(int $id, bool $checked=null, string $name = null, int $order = null){
 			if(!isset($id)) return;
 			$name = $this->db->protectString($name);
-			$item = new listItem(null, null, $name, $id, $checked);
+			$item = new listItem(null, null, $name, $id, $checked, $order);
 			$item->push();
 		}
 
@@ -311,7 +311,7 @@
 						logger::logError($errmsg, "process", "listePage");
 						return $errmsg;
 					}
-					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null);
+					$this->updateItem($getParams["id"], $getParams["checked"] ?? null, $getParams["name"] ?? null, $getParams["order"] ?? null);
 					return "OK";
 				}
 				if(strcmp("addItem", $getParams["aQuery"]) == 0){
