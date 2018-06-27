@@ -100,6 +100,7 @@ function initiateLists(){
 	//Add Item
 	$(".newItem button").click(function(){
 		var itemText = $(".newItem input").val();
+		var newOrder = $("#uncheckedItems").length + 1;
 		$(".newItem input").val(null);
 		$.ajax({
 			url: 'ajax.php?pt=' + GetURLParameter("pt"),
@@ -107,7 +108,8 @@ function initiateLists(){
 				id: GetURLParameter("lid"),
 				aQuery: "addItem",
 				page: GetURLParameter("pt"),
-				name: itemText
+				name: itemText,
+				order: newOrder
 			},
 			success : function(data, textStatus){
 				$("#uncheckedItems").append(data);

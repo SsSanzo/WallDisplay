@@ -259,9 +259,9 @@
 			}
 			foreach ($list->items as $item) {
 				if($item->checked){
-					$rowsChecked[] = $engine->render($listItemTemplate, Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : ""));
+					$rowsChecked[] = $engine->render($listItemTemplate, Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : "", "order" => $item->itemOrder));
 				}else{
-					$rowsUnchecked[] = $engine->render($listItemTemplate, Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : ""));
+					$rowsUnchecked[] = $engine->render($listItemTemplate, Array("id" => $item->id, "name" => $item->name, "checked" => $item->checked ? "checked" : "", "order" => $item->itemOrder));
 				}				
 			}
 			return $engine->render($listTemplate, array("id" => $list->id, "Bcolor" => $list->Bcolor, "Tcolor" => $list->Tcolor, "name" => $list->name, "items" => implode("", $rowsUnchecked), "checkedItems" => implode("", $rowsChecked)));
@@ -315,7 +315,7 @@
 					return "OK";
 				}
 				if(strcmp("addItem", $getParams["aQuery"]) == 0){
-					if(!isset($getParams["name"]) || !isset($getParams["id"])){
+					if(!isset($getParams["name"]) || !isset($getParams["id"]) || !isset($getParams["order"])){
 						$errmsg = "Error: name or id missing";
 						logger::logError($errmsg, "process", "listePage");
 						return $errmsg;
@@ -323,7 +323,7 @@
 					$engine = new templateEngine();
 					$db = new db();
 					$list = new todo($db, null, null, null, (int) $getParams["id"], null);
-					$item = new listItem($db, $list, $this->db->protectString($getParams["name"]), null, null);
+					$item = new listItem($db, $list, $this->db->protectString($getParams["name"]), null, null, (int) $getParams["order"]);
 					$item->insert();
 					return $engine->render("list.one.item", Array(
 						"id" => $item->id,
