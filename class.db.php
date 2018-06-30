@@ -11,10 +11,10 @@
 
 
 		public function __construct(){
-			$this->url = "127.0.0.1";
-			$this->username = "root";
+			$this->url = "db744768329.db.1and1.com";
+			$this->username = "dbo744768329";
 			$this->password = "45FZG3wwX";
-			$this->dbname = "walldisplay";
+			$this->dbname = "db744768329";
 
 			$this->connection = new mysqli($this->url, $this->username, $this->password, $this->dbname);
 			if($this->connection->connect_error){
